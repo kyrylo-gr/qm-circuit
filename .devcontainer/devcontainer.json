@@ -1,0 +1,29 @@
+{
+    "name": "${localWorkspaceFolderBasename}",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "workspaceFolder": "/workspace",
+    // Run as the non-root user that the base image provides.
+    "remoteUser": "vscode",
+    // Node comes from a feature so the Dockerfile stays project-specific.
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "22"
+        }
+    },
+    // volume-subpath requires Docker Engine >= 26. If the subpath is ignored,
+    // re-run the script and choose docker-compose instead.
+    "mounts": [],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "charliermarsh.ruff"
+            ]
+        }
+    }
+}
