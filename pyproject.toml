@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qm-circuit"
+version = "0.1.0"
+description = "Quantum-circuit diagrams of QUA programs"
+requires-python = ">=3.12"
+dependencies = ["qm-qua>=1.4,<1.5", "matplotlib", "numpy"]
+
+[tool.setuptools]
+packages = ["qm_circuit"]

@@ -188,8 +188,18 @@ trash_*.*
 .vscode
 *.code-workspace
 
+.claude
+
+# debugging and generated output (figures: python -B tests/render_benchmarks.py)
+debug/
+data/
+/*.png
+tests/figures/
+
 _*.ipynb
 
 
 _*\.ipynb
 _[^_]*\.py
+
+programs/

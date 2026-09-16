@@ -6,8 +6,12 @@
     },
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
     "workspaceFolder": "/workspace",
-    // Run as the non-root user that the base image provides.
+    // Run as the non-root user that the base image provides. Claude Code
+    // itself runs as the separate, sudo-less agent user instead
+    // (see .devcontainer/claude-wrapper.sh) — vscode keeps sudo for
+    // interactive use.
     "remoteUser": "vscode",
+    "postCreateCommand": "bash .devcontainer/postCreate.sh",
     // Node comes from a feature so the Dockerfile stays project-specific.
     "features": {
         "ghcr.io/devcontainers/features/node:1": {
