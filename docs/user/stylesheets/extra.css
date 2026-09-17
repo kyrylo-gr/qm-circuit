@@ -1,0 +1,134 @@
+:root {
+  --doc-symbol-attribute-fg-color: #0079ff;
+  --doc-symbol-function-fg-color: #00dfa2;
+  --doc-symbol-method-fg-color: #00dfa2;
+  --doc-symbol-class-fg-color: #d1b619;
+  --doc-symbol-module-fg-color: #ff0060;
+
+  --doc-symbol-attribute-bg-color: #0079ff1a;
+  --doc-symbol-function-bg-color: #00dfa21a;
+  --doc-symbol-method-bg-color: #00dfa21a;
+  --doc-symbol-class-bg-color: #d1b6191a;
+  --doc-symbol-module-bg-color: #ff00601a;
+}
+
+[data-md-color-scheme='default'] {
+  --md-primary-fg-color: #0b5394;
+  --md-primary-fg-color--dark: #0c67b6;
+  --md-footer-fg-color: #ffd900;
+  --md-footer-bg-color--dark: #ffd900;
+  --md-footer-bg-color: #ffd900;
+  --md-footer-fg-color--lighter: #666;
+  --md-footer-fg-color--light: #444;
+}
+
+[data-md-color-scheme='slate'] {
+  --md-primary-fg-color: #ffd900;
+  --md-primary-fg-color--dark: #0b5394;
+
+  --md-primary-bg-color: #000;
+  --md-footer-fg-color: #0b5394;
+  --md-footer-bg-color--dark: #083b68;
+  --md-footer-bg-color: #083b68;
+}
+
+.md-header__button.md-logo {
+  margin: 0;
+  padding: 0 1rem;
+  height: 100%;
+  /* background-color: #041f36; */
+}
+.md-header__button.md-logo img {
+  height: 2.4rem;
+}
+
+/* Chip viewer (home page and gallery): source next to its diagram. */
+.qc-off {
+  display: none !important;
+}
+.qc-chip-rows {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.qc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.8rem 0 0.4rem;
+}
+.qc-chip {
+  padding: 0.25rem 0.8rem;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+  color: var(--md-default-fg-color--light);
+  cursor: pointer;
+  transition: background-color 200ms, color 200ms, border-color 200ms;
+}
+.qc-chip:hover:not(:disabled) {
+  border-color: var(--md-accent-fg-color);
+}
+.qc-chip[aria-pressed='true'] {
+  border-color: var(--md-primary-fg-color);
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+}
+.qc-chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.qc-program {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: qc-fade 250ms ease-out;
+}
+.qc-program > .highlight {
+  margin: 0;
+}
+.qc-diagram {
+  order: -1;
+}
+.qc-diagram a {
+  display: block;
+  animation: qc-fade 250ms ease-out;
+}
+.qc-diagram img {
+  display: block;
+  width: 100%;
+  padding: 0.4rem;
+  border-radius: 0.2rem;
+  background: white; /* diagrams are drawn on white; keep them legible in dark mode */
+}
+/* Gallery: diagram at natural size (scrolls sideways), source below. */
+.qc-stacked .qc-diagram {
+  overflow-x: auto;
+}
+.qc-stacked .qc-diagram img {
+  width: auto;
+  max-width: none;
+}
+@keyframes qc-fade {
+  from {
+    opacity: 0;
+    transform: translateY(0.3rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qc-program,
+  .qc-diagram a {
+    animation: none;
+  }
+}
+
+/* Plain diagrams (customising page) get the same white card. */
+.qc-figure {
+  padding: 0.4rem;
+  border-radius: 0.2rem;
+  background: white;
+}
+
+/* Home page call-to-action buttons. */
+.qc-actions {
+  text-align: center;
+}

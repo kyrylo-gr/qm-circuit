@@ -83,8 +83,15 @@ there is one — before any function name,
 type or parameter; a reader with no technical background follows the first line.
 Technical detail comes after, exact names and exact terms, each one explained.
 Every option also carries what it gives up, what it costs — roughly how many
-lines it adds — and what we do instead if it is not chosen. One question per
-message, options keyboard-selectable, a typed answer always accepted.
+lines it adds — and what we do instead if it is not chosen. See
+[Asking questions](#asking-questions) for how it is delivered.
+
+## Asking questions
+
+Every question to the user — an implementation call from the ladder above or
+a `/grilling` session — goes one at a time, never batched. Lead with the
+recommended option when the ladder already points to one; options stay
+keyboard-selectable, and a typed answer is always offered alongside them.
 
 ## Reviews
 
@@ -106,12 +113,13 @@ How a diagram is made, in order:
    innermost user source line. `qm_circuit/tracer.py` patches `_get_loc` in
    every `qm.*` module for the duration of the call and appends a trace id to
    `loc`, keyed to the full Python call stack (frames, `co_positions`, bound
-   arguments). It also patches `_ForScope` (no loc on `for_` in 1.4.1) and stops
+   arguments). It also patches `_ForScope` (no loc on `for_` in 1.4.1), `_ElifScope`
+   (elif reuses the if loc) and stops
    the caller when `q.program()` exits, which is what lets `capture()` grab a
    program built inside a function that would go on to run a job. Patches are
    restored on every exit path.
 2. **Build.** `qm_circuit/build.py` walks `prog.qua_program` into the plain
-   dataclasses of `qm_circuit/model.py` (`Play`, `Wait`, `Align`, `Op`, `Loop`,
+   dataclasses of `qm_circuit/nodes.py` (`Play`, `Wait`, `Align`, `Op`, `Loop`,
    `If`, `Block`). Structure, element names and explicit parameters come from
    the proto (`HasField` tells explicit from config); grouping into `Block`s
    comes from the trace (statements sharing one helper-call frame directly below
@@ -123,7 +131,7 @@ How a diagram is made, in order:
    `qm_circuit/icons.py`, keyed by QUA function name.
 
 The tracer leans on private `qm-qua` internals (`qm._loc`, `_ForScope`,
-`_ProgramScope`); a `qm-qua` upgrade starts by rerunning the tests.
+`_ElifScope`, `_ProgramScope`); a `qm-qua` upgrade starts by rerunning the tests.
 
 Benchmarks: `programs/` holds the user's original lab code and is read-only (it
 imports modules that do not exist here). `tests/benchmark_programs/` holds

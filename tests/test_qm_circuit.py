@@ -13,7 +13,7 @@ import qm.qua as q  # noqa: E402
 from qm.qua._scope_management._core_scopes import _ProgramScope  # noqa: E402
 
 import qm_circuit as qc  # noqa: E402
-from qm_circuit.model import Block, If, Loop, Op, Play  # noqa: E402
+from qm_circuit.nodes import Block, If, Loop, Op, Play  # noqa: E402
 
 ORIG_GET_LOC = qm._loc._get_loc
 ORIG_EXIT = _ProgramScope.__exit__
@@ -52,9 +52,9 @@ def test_import_has_no_side_effects():
     assert_unpatched()
 
 
-def test_lanes_and_explicit_params_only():
+def test_lines_and_explicit_params_only():
     m = qc.model(simple_prog)
-    assert m.lanes == ["drive", "resonator"]
+    assert m.lines == ["drive", "resonator"]
     plays = [n for n in walk(m.body) if isinstance(n, Play)]
     assert [(p.element, p.pulse, p.params) for p in plays] == [
         ("drive", "pi", {}),  # everything from config: no params
@@ -130,7 +130,7 @@ def test_patches_restored_after_exception():
     with pytest.raises(ValueError, match="boom"):
         qc.draw(bad)
     assert_unpatched()
-    assert qc.model(simple_prog).lanes == ["drive", "resonator"]  # still usable afterwards
+    assert qc.model(simple_prog).lines == ["drive", "resonator"]  # still usable afterwards
 
 
 def test_no_overlap_simple_program():
@@ -176,7 +176,7 @@ def test_value_formatting_bool_arrays_uneven_and_streams():
     assert body[3].params == ["element='resonator'", "st=ts"]  # a stream shows its call-site name, not its type
 
 
-def test_elementless_align_and_wait_span_all_lanes():
+def test_elementless_align_and_wait_span_all_lines():
     from matplotlib.figure import Figure
 
     from qm_circuit.render import _Layout
@@ -196,8 +196,8 @@ def test_elementless_align_and_wait_span_all_lanes():
         return p
 
     m = qc.model(prog)
-    lay = _Layout(Figure().add_axes((0, 0, 1, 1)), m.lanes, m.body, False, make_style(None))
-    assert [lay.span(n, m.lanes) for n in m.body[1:]] == [m.lanes, m.lanes, ["resonator"]]
+    lay = _Layout(Figure().add_axes((0, 0, 1, 1)), m.lines, m.body, False, make_style(None))
+    assert [lay.span(n, m.lines) for n in m.body[1:]] == [m.lines, m.lines, ["resonator"]]
 
 
 def test_trailing_branches_without_drawn_content_are_omitted():

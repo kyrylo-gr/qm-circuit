@@ -203,3 +203,4 @@ _*\.ipynb
 _[^_]*\.py
 
 programs/
+how-to-start.md

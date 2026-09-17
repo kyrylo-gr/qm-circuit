@@ -12,6 +12,12 @@
     // interactive use.
     "remoteUser": "vscode",
     "postCreateCommand": "bash .devcontainer/postCreate.sh",
+    "forwardPorts": [3250],
+    "portsAttributes": {
+        "3250": {
+            "label": "docs"
+        }
+    },
     // Node comes from a feature so the Dockerfile stays project-specific.
     "features": {
         "ghcr.io/devcontainers/features/node:1": {

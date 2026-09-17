@@ -75,7 +75,7 @@ def check(fig) -> list[str]:
             if id(q) not in containers and q.get_gid() != p.get_gid() and _shrink(pb).overlaps(_shrink(qb)):
                 out.append(f"patch {p.get_gid()} x patch {q.get_gid()}")
         for ln in lines:
-            if ln.get_gid() not in ("lane", p.get_gid()) and _hits_line(_shrink(pb), ln):
+            if ln.get_gid() not in ("line", p.get_gid()) and _hits_line(_shrink(pb), ln):
                 out.append(f"patch {p.get_gid()} x line {ln.get_gid()}")
     return out
 

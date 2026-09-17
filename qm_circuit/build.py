@@ -15,7 +15,7 @@ from google.protobuf.message import Message
 from qm.qua._expressions import QuaExpression
 from qm.serialization.expression_serializing_visitor import ExpressionSerializingVisitor
 
-from .model import Align, Block, Branch, If, Loop, Op, Play, Program, Wait, elements
+from .nodes import Align, Block, Branch, If, Loop, Op, Play, Program, Wait, elements
 from .tracer import Tracer
 
 _NAME_RE = re.compile(r"\b[A-Za-z_]\w*\b")
