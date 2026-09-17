@@ -11,7 +11,7 @@ import math
 import re
 from collections.abc import Mapping
 
-from google.protobuf.message import Message
+from google.protobuf.message import Message  # type: ignore[import-untyped]  # qm-qua ships no stubs
 from qm.qua._expressions import QuaExpression
 from qm.serialization.expression_serializing_visitor import ExpressionSerializingVisitor
 
@@ -194,7 +194,7 @@ class _Builder:
     def block(self, cid: int, statements, depth: int) -> Block | None:
         call = self.tracer.calls[cid]
         body = self.group(statements, depth + 1)
-        params = [self.param(k, v, call.src.get(k)) for k, v in call.args]
+        params = [self.param(k, v, call.src.get(k) if k is not None else None) for k, v in call.args]
         return Block(call.func, params, body) if body else None
 
     def convert(self, st, depth: int):

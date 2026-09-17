@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+jobs:
+  publish:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - id: tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ref="${{ github.event.workflow_run.head_branch }}"
+          sha="${{ github.event.workflow_run.head_sha }}"
+          is_release=false
+          if [[ "$ref" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            # head_branch alone can't tell a tag from a same-named branch; confirm a
+            # tag ref with this exact name actually points at this exact commit.
+            tag_sha="$(gh api "repos/${{ github.repository }}/git/ref/tags/$ref" --jq .object.sha 2>/dev/null || true)"
+            [[ "$tag_sha" == "$sha" ]] && is_release=true
+          fi
+          echo "is_release=$is_release" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        if: steps.tag.outputs.is_release == 'true'
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        if: steps.tag.outputs.is_release == 'true'
+        with:
+          python-version: '3.12'
+
+      - run: pip install build
+        if: steps.tag.outputs.is_release == 'true'
+
+      - run: python -m build
+        if: steps.tag.outputs.is_release == 'true'
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        if: steps.tag.outputs.is_release == 'true'

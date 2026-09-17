@@ -204,3 +204,5 @@ _[^_]*\.py
 
 programs/
 how-to-start.md
+# local CI virtualenvs (make ci)
+.ci/

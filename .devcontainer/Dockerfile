@@ -12,3 +12,6 @@ WORKDIR /workspace
 
 USER vscode
 RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN claude plugins install mattpocock-skills
+RUN claude plugins marketplace add DietrichGebert/ponytail
+RUN claude plugin install ponytail@ponytail

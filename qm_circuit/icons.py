@@ -21,7 +21,7 @@ def _arc(a0: float, a1: float, r: float = 0.4, cx: float = 0.5, cy: float = 0.5,
         x, y = cx + r * np.cos(end), cy + r * np.sin(end)
         back = np.arctan2(cy + r * np.sin(before) - y, cx + r * np.cos(before) - x)
         for side in (-0.55, 0.55):
-            out.append(([x, x + 0.22 * np.cos(back + side)], [y, y + 0.22 * np.sin(back + side)]))
+            out.append((np.array([x, x + 0.22 * np.cos(back + side)]), np.array([y, y + 0.22 * np.sin(back + side)])))
     return out
 
 

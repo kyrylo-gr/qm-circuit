@@ -1,6 +1,5 @@
 """Model-level tests for qm_circuit (offline, no QuantumMachinesManager). Run: python -B -m pytest tests/"""
 
-import importlib.util
 import sys
 from pathlib import Path
 

@@ -82,7 +82,6 @@ def readout_spectroscopy_prog(
     readout_amplitudes_rel = np.atleast_1d(np.asarray(readout_amplitude_rel, dtype=float))
     num_amplitudes = int(readout_amplitudes_rel.size)
     num_frequencies = int(frequencies_if.size)
-    default_amplitude = float(readout_amplitudes_rel[0])
     # print(
     #     f"num_amplitudes: {num_amplitudes}, num_frequencies: {num_frequencies}, num_inner: {num_inner}"
     # )

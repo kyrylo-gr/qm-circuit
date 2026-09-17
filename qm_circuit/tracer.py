@@ -26,6 +26,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from types import FrameType
+from typing import Any
 
 import qm._loc as _loc_mod
 from qm.qua._expressions import QuaExpression
@@ -64,8 +65,12 @@ def _is_user_file(filename: str) -> bool:
 
 def _call_node(f: FrameType | None) -> ast.Call | None:
     """AST of the call expression frame ``f`` is currently executing (None if unavailable)."""
+    if f is None:
+        return None
     try:
         l0, l1, c0, c1 = list(f.f_code.co_positions())[f.f_lasti // 2]
+        if l0 is None or l1 is None or c0 is None or c1 is None:
+            return None
         raw = [ln.encode() for ln in linecache.getlines(f.f_code.co_filename)[l0 - 1 : l1]]
         seg = raw[0][c0:c1] if l0 == l1 else b"".join([raw[0][c0:], *raw[1:-1], raw[-1][:c1]])
         node = ast.parse("(\n" + seg.decode() + "\n)", mode="eval").body
@@ -81,10 +86,11 @@ def _passed_args(f: FrameType) -> tuple[list[tuple[str | None, object]], dict[st
     code, loc = f.f_code, info.locals
     params = [a for a in info.args if a not in ("self", "cls")]
     passed, src = set(params), {}
-    call = _call_node(f.f_back)
+    fb = f.f_back
+    call = _call_node(fb)
     callee = getattr(call.func, "attr", getattr(call.func, "id", None)) if call else None
-    if callee == code.co_name:  # otherwise (partial, alias, ...) positions cannot be trusted: show all
-        positional = [a for a in info.args[: code.co_argcount] if a not in ("self", "cls")]
+    if call is not None and fb is not None and callee == code.co_name:  # otherwise (partial, alias, ...)
+        positional = [a for a in info.args[: code.co_argcount] if a not in ("self", "cls")]  # positions untrusted
         starred = any(isinstance(a, ast.Starred) for a in call.args)
         passed = set(positional if starred else positional[: len(call.args)])
         if not starred:
@@ -96,7 +102,7 @@ def _passed_args(f: FrameType) -> tuple[list[tuple[str | None, object]], dict[st
             else:  # **mapping: its keys were passed
                 d = None
                 if isinstance(kw.value, ast.Name):
-                    d = f.f_back.f_locals.get(kw.value.id, f.f_back.f_globals.get(kw.value.id))
+                    d = fb.f_locals.get(kw.value.id, fb.f_globals.get(kw.value.id))
                 passed |= set(d) if isinstance(d, Mapping) else set(params)
     args: list[tuple[str | None, object]] = [(a, loc[a]) for a in params if a in passed and a in loc]
     if info.varargs:
@@ -121,8 +127,8 @@ def proto_var_name(obj) -> str | None:
 class Tracer:
     """Patches qm while active (use as a context manager); results stay available afterwards."""
 
-    def __init__(self):
-        self.program = None  # qm Program, set when q.program() exits
+    def __init__(self) -> None:
+        self.program: Any = None  # qm Program, set when q.program() exits
         self.name = "program"  # name of the function that built it
         self.traces: list[tuple[int, ...]] = []  # call ids, program frame first
         self.apis: list[str] = []  # by trace: the qm function the user code called (frame_rotation, ...)
@@ -141,8 +147,9 @@ class Tracer:
         return self._user[fn]
 
     def get_loc(self) -> str:
-        chain, api = [], ""
-        f = sys._getframe(1)
+        chain: list[int] = []
+        api = ""
+        f: FrameType | None = sys._getframe(1)
         while f is not None:
             if not chain and not self._user_frame(f):
                 api = f.f_code.co_name
