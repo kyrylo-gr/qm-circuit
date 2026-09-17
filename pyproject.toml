@@ -1,13 +1,15 @@
 [build-system]
-requires = ["setuptools>=61", "setuptools_scm>=8"]
+requires = ["setuptools>=77","setuptools_scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "qm-circuit"
 dynamic = ["version"]
 description = "Quantum-circuit diagrams of QUA programs"
+readme = "README.md"
+license = "MIT"
 requires-python = ">=3.12"
-dependencies = ["qm-qua>=1.4,<1.5", "matplotlib", "numpy"]
+dependencies = ["qm-qua>=1.3", "matplotlib", "numpy"]
 
 [project.optional-dependencies]
 docs = ["mkdocs-material>=9.5", "mkdocstrings[python]>=0.26", "mkdocs-gen-files>=0.5"]
@@ -23,5 +25,8 @@ local_scheme = "no-local-version"
 target-version = "py312"
 
 [tool.ruff.lint]
-select = ["E4", "E7", "E9", "F"]
+select = ["E4", "E7", "E9", "F", "S"]
 ignore = ["E741"]  # I/Q are this domain's standard quadrature names, not ambiguous here
+
+[tool.ruff.lint.per-file-ignores]
+"{tests,docs}/**" = ["S101"]  # assert is how tests and the docs build check things

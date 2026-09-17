@@ -69,7 +69,7 @@ features (`content.code.copy`, `navigation.instant`, `navigation.sections`,
 `search.suggest`, `search.highlight`). The logo is a Material icon until a real
 one exists. Additions:
 - `strict: true` and `edit_uri`
-- Features `content.action.edit`, `navigation.tabs`, `navigation.top`, `toc.follow`, `search.share`
+- Features `content.action.edit`, `navigation.top`, `toc.follow`, `search.share`
 - Markdown extensions `admonition`, `pymdownx.details`, `pymdownx.superfences`, `pymdownx.highlight`, `pymdownx.inlinehilite`, `pymdownx.snippets`, `attr_list`, `md_in_html`
 - mkdocstrings with Google docstrings, signature annotations shown and a separate signature
 

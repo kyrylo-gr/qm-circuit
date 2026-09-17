@@ -13,6 +13,12 @@ offline: no Quantum Machines server and no hardware configuration. Diagrams are 
 is a standard `Figure`: save it as SVG, PNG or PDF, show it in a notebook, or put it in your reports like any other
 plot.
 
+## Why
+
+qm-circuit isn't meant to compete with the Quantum Machines simulator. It lays out your whole
+sequence in order, giving you a clear picture of what the program does. One look is enough to follow it or spot a
+mistake, without digging through the code.
+
 ```python
 import qm_circuit as qc
 

@@ -15,3 +15,4 @@ RUN curl -fsSL https://claude.ai/install.sh | bash
 RUN claude plugins install mattpocock-skills
 RUN claude plugins marketplace add DietrichGebert/ponytail
 RUN claude plugin install ponytail@ponytail
+RUN npx skills add JuliusBrussee/caveman -g

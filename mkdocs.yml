@@ -28,7 +28,6 @@ theme:
     - content.code.copy
     - navigation.instant
     - navigation.sections
-    - navigation.tabs
     - navigation.top
     - search.share
     - search.suggest
